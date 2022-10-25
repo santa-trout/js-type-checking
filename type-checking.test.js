@@ -148,6 +148,32 @@ function isEither3Test(assert) {
     assert(!TC.isEither3(TC.isNull, TC.isNumber, TC.isString)(false));
 }
 
+/** @param { function(unknown): void } assert */
+function isInstanceOfTest(assert) {
+    class A {}
+    class C {}
+    class C1 extends C {}
+
+    assert(!TC.isInstanceOf(C)(new A()));
+    assert(TC.isInstanceOf(C)(new C()));
+    assert(TC.isInstanceOf(C)(new C1()));
+
+    assert(!TC.isInstanceOf(C)({ a: 123 }));
+    assert(!TC.isInstanceOf(C)(123));
+    assert(!TC.isInstanceOf(C)(123.4));
+    assert(!TC.isInstanceOf(C)([""]));
+    assert(!TC.isInstanceOf(C)([]));
+    assert(!TC.isInstanceOf(C)([]));
+    assert(!TC.isInstanceOf(C)([""]));
+    assert(!TC.isInstanceOf(C)([""]));
+    assert(!TC.isInstanceOf(C)(null));
+    assert(!TC.isInstanceOf(C)(undefined));
+    assert(!TC.isInstanceOf(C)(new String("")));
+    assert(!TC.isInstanceOf(C)("123"));
+    assert(!TC.isInstanceOf(C)(true));
+    assert(!TC.isInstanceOf(C)(false));
+}
+
 /** @param { unknown } value */
 function addressOrThrow(value) {
     TC.assert(value, TC.hasKey("street", TC.isString));
@@ -184,6 +210,7 @@ function runTests(assert) {
     isNullTest(assert);
     isNumberTest(assert);
     isStringTest(assert);
+    isInstanceOfTest(assert);
 }
 
 runTests(result => { if (!result) throw new Error(); });
