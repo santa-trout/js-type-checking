@@ -56,3 +56,30 @@ type Person = ReturnType<typeof personOrThrow>;
 ```
 Here we derive the type `Person` from the actual code, which results in a single source of truth. When we change `personOrThrow`, the type changes along automatically. There is a problem though. The resulting `Person` type lost details. Even with recent TypeScript versions (4.9.0), a line such as `if (!("lastName" in value) || typeof value.lastName !== "string") return false;` would only resolve the type of `value` to `object & Record<"lastName", unknown>` instead of `object & Record<"lastName", string>`. TypeScript resolves `Person` to `object & Record<"firstName", unknown> & Record<"lastName", unknown> & Record<"addresses", unknown>`. We were so close to an usable solution! This is where this library comes in.
 ## Solution
+This library implements TypeScript type guards, but with narrower type inference. With these, we can implement our checks as such:
+```ts
+import * as TC from "./type-checking.js";
+
+async function getPerson(): Promise<Person> {
+  return personOrThrow(await (await fetch(...)).json());
+}
+
+function addressOrThrow(value: unknown) {
+  TC.assert(value, TC.hasKey("street", TC.isString));
+  TC.assert(value, TC.hasKey("houseNumber", TC.isNumber));
+  return value;
+}
+
+type Address = ReturnType<typeof addressOrThrow>;
+
+function personOrThrow(value: unknown) {
+  TC.assert(value, TC.hasKey("firstName", TC.isString));
+  TC.assert(value, TC.hasKey("lastName", TC.isString));
+  TC.assert(value, TC.hasOptionalKey("middleName", TC.isString));
+  TC.assert(value, TC.hasKey("addresses", TC.isArray(TC.throwing(addressOrThrow))));
+  return value;
+}
+
+type Person = ReturnType<typeof personOrThrow>;
+```
+The central concept are type guards. Many of the functions in the library can take type guards and always return type guards. `TC.hasKey("firstName", TC.isString)` for example returns a type guard function, checking whether some value supplied to it has a key `firstName` which is of type `string`. `TC.throwing` takes a function that throws and returns a type guard, without catching, to preserve accurate errors. Such a design makes the library much more composable. The main feature is, that it preserves accurate inferred types. Here `Person` is inferred as `Record<"firstName", string> & Record<"lastName", string> & Partial<Record<"middleName", string>> & Record<"addresses", Address[]>`.
