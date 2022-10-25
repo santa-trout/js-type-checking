@@ -2,5 +2,6 @@
     "main": "type-checking.js",
     "name": "js-type-checking",
     "repository": "github:santa-trout/js-type-checking",
-    "type": "module"
+    "type": "module",
+    "version": "1.0.0"
 }
