@@ -21,7 +21,7 @@ async function getPerson(): Promise<Person> {
   throw new Error();
 }
 
-function isPerson(value: any): value is Person {
+function isPerson(value: unknown): value is Person {
   if (typeof value !== "object" || value == null) return false;
   if (!("firstName" in value) || typeof value.firstName !== "string") return false;
   if (!("lastName" in value) || typeof value.lastName !== "string") return false;
@@ -37,7 +37,7 @@ type Person = {
   addresses: Address[]
 };
 ```
-With this, we immediatelly known, when we receive data that didn't meet our expectations. The error thrown directly points to the `getPerson` function. The problem with this approach is, that we now have to encode our expectations twice. Once with `type Person` and the other time with `isPerson`. Let's try to resolve this issue with the next approach:
+With this, we immediatelly known, if we receive data that didn't meet our expectations. The error thrown directly points to the `getPerson` function. The problem with this approach is, that we now have to encode our expectations twice. Once with `type Person` and the other time with `isPerson`. Even worse, those definitions can drift apart or not match up at all with inaccurate implementations of `isPerson`. Let's try to resolve this issue with the next approach:
 ```ts
 async function getPerson(): Promise<Person> {
   return personOrThrow(await (await fetch(...)).json());
@@ -54,10 +54,5 @@ function personOrThrow(value: unknown) {
 
 type Person = ReturnType<typeof personOrThrow>;
 ```
-
-
-
-
-
-
-Additionally there can be errors hard to catch in `isPerson` since it processes an `any` value. We could change `value` to `unknown`, which would catch many coding errors, but even with recent TypeScript versions, a line such as `if (!("lastName" in value) || typeof value.lastName !== "string") return false;` would only resolve the type of `value` to `object & Record<"lastName", unknown>` instead of `object & Record<"lastName", string>`.
+Here we derive the type `Person` from the actual code, which results in a single source of truth. When we change `personOrThrow`, the type changes along automatically. There is a problem though. The resulting `Person` type lost details. Even with recent TypeScript versions (4.9.0), a line such as `if (!("lastName" in value) || typeof value.lastName !== "string") return false;` would only resolve the type of `value` to `object & Record<"lastName", unknown>` instead of `object & Record<"lastName", string>`. TypeScript resolves `Person` to `object & Record<"firstName", unknown> & Record<"lastName", unknown> & Record<"addresses", unknown>`. We were so close to an usable solution! This is where this library comes in.
+## Solution
