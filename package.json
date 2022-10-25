@@ -1,9 +1,6 @@
 {
-    "devDependencies": {
-        "@typescript-eslint/eslint-plugin": "5.41.0",
-        "@typescript-eslint/parser": "5.41.0",
-        "eslint": "8.26.0",
-        "typescript": "4.8.4"
-    },
+    "main": "type-checking.js",
+    "name": "js-type-checking",
+    "repository": "github:santa-trout/js-type-checking",
     "type": "module"
 }
