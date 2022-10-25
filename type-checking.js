@@ -114,6 +114,20 @@ export function isEither3(typeGuardA, typeGuardB, typeGuardC) {
 }
 
 /**
+ * @template { Function } T
+ * @param { T } constructor
+ */
+export function isInstanceOf(constructor) {
+    /**
+     * @param { unknown } value
+     * @return { value is InstanceType<T> }
+     */
+    return function isInstanceOfCheck(value) {
+        return value instanceof constructor;
+    };
+}
+
+/**
  * @param { unknown } value
  * @return { value is null }
  */
