@@ -4,6 +4,7 @@
         "@typescript-eslint/parser": "5.41.0",
         "typescript": "4.8.4"
     },
+    "files": ["./type-checking.d.ts"],
     "main": "type-checking.js",
     "name": "@santa--trout/js-type-checking",
     "repository": "github:santa-trout/js-type-checking",
