@@ -114,7 +114,7 @@ export function isEither3(typeGuardA, typeGuardB, typeGuardC) {
 }
 
 /**
- * @template { Function } T
+ * @template { abstract new (...args: any) => any } T
  * @param { T } constructor
  */
 export function isInstanceOf(constructor) {
