@@ -1,7 +1,7 @@
 {
     "files": ["./type-checking.d.ts"],
-    "main": "type-checking.js",
-    "name": "js-type-checking",
+    "main": "./type-checking.js",
+    "name": "@santa--trout/js-type-checking",
     "repository": "github:santa-trout/js-type-checking",
     "type": "module",
     "version": "1.0.1"
