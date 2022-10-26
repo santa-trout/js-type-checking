@@ -26,7 +26,7 @@ function isPerson(value: unknown): value is Person {
   if (!("firstName" in value) || typeof value.firstName !== "string") return false;
   if (!("lastName" in value) || typeof value.lastName !== "string") return false;
   if ("middleName" in value && typeof value.middleName !== "string") return false;
-  if (!("addresses" in value) || !Array.isArray(value.addresses) || value.addresses.every(isAddress)) return false;
+  if (!("addresses" in value) || !Array.isArray(value.addresses) || !value.addresses.every(isAddress)) return false;
   return true;
 }
 
@@ -48,7 +48,7 @@ function personOrThrow(value: unknown) {
   if (!("firstName" in value) || typeof value.firstName !== "string") throw new TypeError();
   if (!("lastName" in value) || typeof value.lastName !== "string") throw new TypeError();
   if ("middleName" in value && typeof value.middleName !== "string") throw new TypeError();
-  if (!("addresses" in value) || !Array.isArray(value.addresses) || value.addresses.every(isAddress)) throw new TypeError();
+  if (!("addresses" in value) || !Array.isArray(value.addresses) || !value.addresses.every(isAddress)) throw new TypeError();
   return value;
 }
 
