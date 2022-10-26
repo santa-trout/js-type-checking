@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+        "allowJs": true,
+        "checkJs": true,
+        "declaration": true,
+        "emitDeclarationOnly": true,
+        "module": "ESNext",
+        "moduleResolution": "node16",
+        "noUncheckedIndexedAccess": true,
+        "removeComments": true,
+        "skipLibCheck": true,
+        "strict": true,
+        "target": "ESNext"
+    },
+    "include": ["./*.js"]
+}
