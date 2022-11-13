@@ -21,7 +21,13 @@ export function hasKey(entryKey, entryTypeGuard) {
      * @return { value is Record<EntryKey, EntryValue> }
      */
     return function hasKeyCheck(value) {
-        return typeof value === "object" && value != null && entryKey in value && entryTypeGuard(value[entryKey]);
+        let isKeyInValue = false;
+        try {
+            isKeyInValue = entryKey in value;
+        } catch (failedToLookupKey) {
+            return false;
+        }
+        return isKeyInValue && entryTypeGuard(value[entryKey]);
     };
 }
 
@@ -37,7 +43,13 @@ export function hasOptionalKey(entryKey, entryTypeGuard) {
      * @return { value is Partial<Record<EntryKey, EntryValue>> }
      */
     return function hasOptionalKeyCheck(value) {
-        return typeof value === "object" && value != null && (!(entryKey in value) || entryTypeGuard(value[entryKey]));
+        let isKeyInValue = false;
+        try {
+            isKeyInValue = entryKey in value;
+        } catch (failedToLookupKey) {
+            return false;
+        }
+        return !isKeyInValue || entryTypeGuard(value[entryKey]);
     };
 }
 
@@ -114,6 +126,14 @@ export function isEither3(typeGuardA, typeGuardB, typeGuardC) {
 }
 
 /**
+ * @param { unknown } value
+ * @return { value is Function }
+ */
+export function isFunction(value) {
+    return typeof value === "function";
+}
+
+/**
  * @template { abstract new (...args: any) => any } T
  * @param { T } constructor
  */
@@ -141,6 +161,14 @@ export function isNull(value) {
  */
 export function isNumber(value) {
     return typeof value === "number";
+}
+
+/**
+ * @param { unknown } value
+ * @return { value is object }
+ */
+export function isObject(value) {
+    return typeof value === "object";
 }
 
 /**

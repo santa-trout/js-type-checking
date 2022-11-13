@@ -1,5 +1,14 @@
 import * as TC from "./type-checking.js";
 
+function someFunctionA() {}
+someFunctionA.a = 123;
+
+function someFunctionB() {}
+
+function addressExampleFunction() {}
+addressExampleFunction.street = "";
+addressExampleFunction.houseNumber = 123;
+
 /** @param { function(unknown): void } assert */
 function hasKeyTest(assert) {
     assert(TC.hasKey("a", TC.isNumber)({ a: 123 }));
@@ -7,6 +16,10 @@ function hasKeyTest(assert) {
     assert(!TC.hasKey("a", TC.isNumber)({ a: undefined }));
     assert(!TC.hasKey("a", TC.isNumber)({ a: null }));
     assert(!TC.hasKey("a", TC.isNumber)({}));
+
+    assert(TC.hasKey("a", TC.isNumber)(someFunctionA));
+    assert(!TC.hasKey("a", TC.isString)(someFunctionA));
+    assert(!TC.hasKey("a", TC.isNumber)(someFunctionB));
 
     assert(TC.hasKey("a", TC.isUndefined)({ a: undefined }));
     assert(!TC.hasKey("a", TC.isUndefined)({}));
@@ -23,6 +36,9 @@ function hasOptionalKeyTest(assert) {
     assert(!TC.hasOptionalKey("a", TC.isNumber)({ a: undefined }));
     assert(!TC.hasOptionalKey("a", TC.isNumber)({ a: null }));
     assert(TC.hasOptionalKey("a", TC.isNumber)({}));
+
+    assert(TC.hasOptionalKey("a", TC.isNumber)(someFunctionA));
+    assert(TC.hasOptionalKey("a", TC.isNumber)(someFunctionB));
 
     assert(TC.hasOptionalKey("a", TC.isUndefined)({ a: undefined }));
     assert(TC.hasOptionalKey("a", TC.isUndefined)({}));
