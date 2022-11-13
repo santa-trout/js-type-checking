@@ -168,7 +168,7 @@ export function isNumber(value) {
  * @return { value is object }
  */
 export function isObject(value) {
-    return typeof value === "object";
+    return typeof value === "object" && value != null;
 }
 
 /**
