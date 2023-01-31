@@ -10,6 +10,7 @@ export function isEither3<A, B, C>(typeGuardA: (item: unknown) => item is A, typ
 export function isFunction(value: unknown): value is Function;
 export function isInstanceOf<T extends abstract new (...args: any) => any>(constructor: T): (value: unknown) => value is InstanceType<T>;
 export function isNull(value: unknown): value is null;
+export function isNullish(value: unknown): value is null | undefined;
 export function isNumber(value: unknown): value is number;
 export function isObject(value: unknown): value is object;
 export function isString(value: unknown): value is string;

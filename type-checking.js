@@ -157,6 +157,14 @@ export function isNull(value) {
 
 /**
  * @param { unknown } value
+ * @return { value is null | undefined }
+ */
+export function isNullish(value) {
+    return value == null;
+}
+
+/**
+ * @param { unknown } value
  * @return { value is number }
  */
 export function isNumber(value) {
